@@ -51,6 +51,19 @@ func BytePtrFromString(s string) (*byte, error) {
 	return &a[0], nil
 }
 
+// BytePtrToString converts a narrow, null-terminated array of
+// bytes to a Go string.
+func BytePtrToString(a *byte) string {
+  if a == nil {
+    return ""
+  }
+  var i uintptr
+  ptr := uintptr(unsafe.Pointer(a))
+  for i = 0; *(*byte)(unsafe.Pointer(ptr + i)) != 0; i++ {
+  }
+  return string(((*[1<<30]byte)(unsafe.Pointer(a)))[0:i])
+}
+
 // Single-word zero for use when we need a valid pointer to 0 bytes.
 // See mksyscall.pl.
 var _zero uintptr
