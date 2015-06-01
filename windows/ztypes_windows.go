@@ -1002,6 +1002,8 @@ const (
 	AI_PASSIVE     = 1
 	AI_CANONNAME   = 2
 	AI_NUMERICHOST = 4
+	
+	AI_FQDN = 0x00020000
 )
 
 type GUID struct {

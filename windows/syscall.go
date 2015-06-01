@@ -51,6 +51,26 @@ func BytePtrFromString(s string) (*byte, error) {
 	return &a[0], nil
 }
 
+// UTF16PtrToString converts a *uint16 to a string
+func UTF16PtrToString(a *uint16) string {
+  if a == nil {
+    return ""
+  }
+  var i uintptr
+  ptr := uintptr(unsafe.Pointer(a))
+
+  // Iterate until we hit a null terminator
+  for i = 0; *(*uint16)(unsafe.Pointer(ptr + i)) != 0; i++ {
+  }
+
+  // Convert the *byte to a slice now that we know the length
+  // Making a slice from a pointer requires making a 2^31 length arary
+  // and then slicing it down to the known length
+  uintSlice := ((*[1<<30]uint16)(unsafe.Pointer(a)))[0:i]
+
+  return syscall.UTF16ToString(uintSlice)
+}
+
 // Single-word zero for use when we need a valid pointer to 0 bytes.
 // See mksyscall.pl.
 var _zero uintptr
